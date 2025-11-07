@@ -4,6 +4,7 @@ const app = express()
 const cors = require('cors')
 app.use(express.json())
 app.use(cors())
+app.use(express.static('dist'))
 
 let persons = [
     { 
@@ -42,7 +43,7 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).json({error: "content missing"});
   }
   const existingPerson = persons.find(people => people.name === person.name);
-  const id = Math.random(0, 100000)
+  const id = Math.random(0, 100000).toString()
   if (existingPerson) {
     return response.status(400).json({error: "Person already exists"});
   } 
