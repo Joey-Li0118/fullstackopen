@@ -50,9 +50,8 @@ const App = () => {
     const personToDelete = persons.find(p => p.id === id);  // you still have access here
     if (window.confirm('Are you sure you want to delete this person from the phonebook?')) {
       phoneService.del(id).then(() => {
-  setPersons(persons.filter(person => person.id !== id))
-    }).catch(error => {
-      personAssignment()
+      phoneService.getAll().then(updatedPersons => {setPersons(updatedPersons);
+    });    }).catch(error => {
         setErrorMessage(`${personToDelete.name} was already removed from server`);
         setTimeout(() => {
           setErrorMessage(null);
@@ -107,17 +106,32 @@ const App = () => {
   }    
 
   return (
-    <div>
-      <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-pink-50 to-purple-100 flex flex-col items-center p-6">
+  <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 mt-8">
+    <h2 className="text-3xl font-bold text-center text-pink-600 mb-6">Phonebook</h2>
 
-      <Filter form = {filter} filter = {searchFilter}/>
-        <Form name = {newName} namechange = {change} number = {newNumber} numberchange = {newphonewhodis} submit = {submission}/>
-      <h2>Numbers</h2>
-      <ul>
-      <Person peeps = {filteredPeople} onDelete = {deleteButton}/>
-      </ul>
+    <Notification message={errorMessage} />
+
+    <div className="flex flex-col gap-4 mb-6">
+      <Filter form={filter} filter={searchFilter} />
+      <Form
+        name={newName}
+        namechange={change}
+        number={newNumber}
+        numberchange={newphonewhodis}
+        submit={submission}
+      />
     </div>
+
+    <h2 className="text-xl font-semibold text-purple-700 mb-3">Saved Contacts</h2>
+    <ul className="divide-y divide-gray-200">
+      <Person peeps={filteredPeople} onDelete={deleteButton} />
+    </ul>
+  </div>
+
+  <Footer />
+</div>
+
   )
 }
 
